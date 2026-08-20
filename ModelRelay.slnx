@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/ModelRelay.Core/ModelRelay.Core.csproj" />
+  <Project Path="src/ModelRelay.Infrastructure/ModelRelay.Infrastructure.csproj" />
+  <Project Path="src/ModelRelay.Api/ModelRelay.Api.csproj" />
+  <Project Path="tests/ModelRelay.Tests/ModelRelay.Tests.csproj" />
+</Solution>

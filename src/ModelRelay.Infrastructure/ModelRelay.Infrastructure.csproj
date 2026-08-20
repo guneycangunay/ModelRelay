@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="../ModelRelay.Core/ModelRelay.Core.csproj" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="StackExchange.Redis" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../db/migrations/001_initial.sql">
+      <Link>Migrations/001_initial.sql</Link>
+      <LogicalName>ModelRelay.Infrastructure.Migrations.001_initial.sql</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

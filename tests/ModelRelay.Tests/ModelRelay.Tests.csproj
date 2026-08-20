@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/ModelRelay.Core/ModelRelay.Core.csproj" />
+    <ProjectReference Include="../../src/ModelRelay.Infrastructure/ModelRelay.Infrastructure.csproj" />
+    <PackageReference Include="xunit.v3.mtp-v2" />
+  </ItemGroup>
+</Project>

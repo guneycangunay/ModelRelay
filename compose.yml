@@ -1,0 +1,57 @@
+services:
+  api:
+    build: .
+    environment:
+      MODELRELAY_POSTGRES: Host=postgres;Port=5432;Database=modelrelay;Username=modelrelay;Password=modelrelay
+      MODELRELAY_REDIS: redis:6379
+      MODELRELAY_DEMO_API_KEY: relay_demo_key_change_me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: modelrelay
+      POSTGRES_USER: modelrelay
+      POSTGRES_PASSWORD: modelrelay
+    volumes:
+      - modelrelay-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U modelrelay -d modelrelay"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - modelrelay-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.158.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./observability/otel-collector.yaml:/etc/otelcol/config.yaml:ro
+    ports:
+      - "4317:4317"
+
+volumes:
+  modelrelay-postgres:
+  modelrelay-redis:

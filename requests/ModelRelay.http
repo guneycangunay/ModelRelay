@@ -1,0 +1,52 @@
+@host = http://localhost:8080
+@apiKey = relay_demo_key_change_me
+
+### Service information
+GET {{host}}/api/info
+
+### Readiness
+GET {{host}}/health/ready
+
+### Normal completion
+POST {{host}}/v1/chat/completions
+Content-Type: application/json
+X-Api-Key: {{apiKey}}
+
+{
+  "model": "relay-fast",
+  "messages": [
+    { "role": "user", "content": "Explain why idempotency matters in distributed systems." }
+  ],
+  "max_tokens": 180,
+  "temperature": 0.2
+}
+
+### Force primary-provider failure and observe fallback
+POST {{host}}/v1/chat/completions
+Content-Type: application/json
+X-Api-Key: {{apiKey}}
+
+{
+  "model": "relay-fast",
+  "messages": [
+    { "role": "user", "content": "[fail-primary] Explain circuit breakers." }
+  ],
+  "max_tokens": 120
+}
+
+### Stream completion
+POST {{host}}/v1/chat/completions
+Content-Type: application/json
+X-Api-Key: {{apiKey}}
+
+{
+  "model": "relay-balanced",
+  "stream": true,
+  "messages": [
+    { "role": "user", "content": "Stream a short explanation of provider failover." }
+  ]
+}
+
+### Dashboard summary
+GET {{host}}/admin/metrics/summary
+X-Api-Key: {{apiKey}}

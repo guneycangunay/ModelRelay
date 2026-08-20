@@ -1,4 +1,5 @@
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { FormEvent } from 'react'
 
 type ProviderSummary = {
   provider: string
@@ -54,7 +55,7 @@ function App() {
     return Math.min(100, (summary.costMonthMicroUsd / summary.budgetMicroUsd) * 100)
   }, [summary])
 
-  async function submitPrompt(event: FormEvent) {
+  async function submitPrompt(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setLoading(true)
     setAnswer('')
